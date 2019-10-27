@@ -47,7 +47,7 @@ export default class Event extends Component {
                 <div className="row justify-content-center">
                     <div className="col-md-8">
                         <div className="card">
-                            <div className="card-header">Calendar Event</div>
+                            <div className="card-header">Appetiser Calendar Event</div>
                             <div className="card-body">
                                 <form onSubmit={this.handleSubmit}>
                                     <div className="form-group">
