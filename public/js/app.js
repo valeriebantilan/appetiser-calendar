@@ -68929,11 +68929,12 @@ function (_Component) {
 /*!******************************************!*\
   !*** ./resources/js/components/Event.js ***!
   \******************************************/
-/*! exports provided: default */
+/*! exports provided: CheckBox, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CheckBox", function() { return CheckBox; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Event; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -68942,6 +68943,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -68962,6 +68975,20 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+var CheckBox = function CheckBox(props) {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    style: {
+      padding: '10px',
+      display: 'inline-block'
+    }
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    key: props.id,
+    onChange: props.handleCheckChieldElement,
+    type: "checkbox",
+    checked: props.isChecked,
+    value: props.value
+  }), " ", props.value);
+};
 
 var Event =
 /*#__PURE__*/
@@ -68975,41 +69002,132 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Event).call(this));
     _this.state = {
-      events: [],
-      name: ''
+      eventName: '',
+      eventStart: '',
+      eventEnd: '',
+      isLoading: false,
+      days: [{
+        id: 'monday',
+        value: "Monday",
+        isChecked: false
+      }, {
+        id: 'tuesday',
+        value: "Tuesday",
+        isChecked: false
+      }, {
+        id: 'wednesday',
+        value: "Wednesday",
+        isChecked: false
+      }, {
+        id: 'thursday',
+        value: "Thursday",
+        isChecked: false
+      }, {
+        id: 'friday',
+        value: "Friday",
+        isChecked: false
+      }, {
+        id: 'saturday',
+        value: "Saturday",
+        isChecked: false
+      }, {
+        id: 'sunday',
+        value: "Sunday",
+        isChecked: false
+      }],
+      events: []
     };
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    _this.handleCheckChieldElement = _this.handleCheckChieldElement.bind(_assertThisInitialized(_this));
+    _this.renderEvents = _this.renderEvents.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(Event, [{
+    key: "handleChange",
+    value: function handleChange(e) {
+      this.setState(_defineProperty({}, e.target.name, e.target.value));
+    }
+  }, {
     key: "handleSubmit",
     value: function handleSubmit(e) {
+      var _this2 = this;
+
       e.preventDefault();
-      console.log(event.target.elements.eventName.value);
-      console.log(event.target.elements.eventStart.value);
-      console.log(event.target.elements.eventEnd.value); // this.setState({
-      //     name: e.target.value
-      // });
-      // console.log('onChange', this.state.name);
+      this.setState({
+        isLoading: true
+      });
+      var _this$state = this.state,
+          eventName = _this$state.eventName,
+          eventStart = _this$state.eventStart,
+          eventEnd = _this$state.eventEnd,
+          days = _this$state.days;
+      console.log({
+        eventName: eventName,
+        eventStart: eventStart,
+        eventEnd: eventEnd,
+        days: days
+      });
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('api/event', {
+        eventName: eventName,
+        eventStart: eventStart,
+        eventEnd: eventEnd,
+        days: days
+      }, {
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(function (response) {
+        _this2.setState({
+          events: [response.data].concat(_toConsumableArray(_this2.state.events))
+        });
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }
   }, {
     key: "componentWillMount",
     value: function componentWillMount() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('api/event').then(function (response) {
-        _this2.setState({
-          events: response.data
+        _this3.setState({
+          events: _toConsumableArray(response.data)
         });
       })["catch"](function (errors) {
         console.log(errors);
       });
     }
   }, {
+    key: "handleCheckChieldElement",
+    value: function handleCheckChieldElement(event) {
+      var days = this.state.days;
+      days.forEach(function (day) {
+        if (day.value === event.target.value) day.isChecked = event.target.checked;
+      });
+      this.setState({
+        days: days
+      });
+    }
+  }, {
+    key: "renderEvents",
+    value: function renderEvents() {
+      return this.state.events.map(function (event) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: event.id,
+          className: "media"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "media-body"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, event.event_name)));
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      var events = this.state.events;
+      var _this4 = this;
+
+      var days = this.state.days;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -69020,41 +69138,55 @@ function (_Component) {
         className: "card"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-header"
-      }, "Calendar Event"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "Appetiser Calendar Event"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-        onSubmit: this.handleSubmit
+        onSubmit: this.handleSubmit,
+        method: "post"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-        "for": "eventName"
+        htmlFor: "eventName"
       }, " Event Name "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "text",
         name: "eventName",
-        "class": "form-control",
-        placeholder: ""
+        className: "form-control",
+        placeholder: "",
+        onChange: this.handleChange,
+        required: true
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-        "for": "eventName"
+        htmlFor: "eventStart"
       }, " From "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "date",
         name: "eventStart",
-        "class": "form-control",
-        placeholder: ""
+        className: "form-control",
+        placeholder: "",
+        onChange: this.handleChange,
+        required: true
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-        "for": "eventName"
+        htmlFor: "eventEnd"
       }, " To "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "date",
         name: "eventEnd",
-        "class": "form-control",
-        placeholder: ""
+        className: "form-control",
+        placeholder: "",
+        onChange: this.handleChange,
+        required: true
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }, days.map(function (days) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CheckBox, _extends({
+          key: days.id,
+          handleCheckChieldElement: _this4.handleCheckChieldElement
+        }, days));
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "submit",
         className: "btn btn-primary"
-      }, "Create Event")))))));
+      }, "Create Event")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), this.renderEvents())))));
     }
   }]);
 
@@ -69110,8 +69242,8 @@ if (document.getElementById('root')) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/valerie/appetiser/appetiser-calendar/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/valerie/appetiser/appetiser-calendar/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\appetiser-calendar\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\appetiser-calendar\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

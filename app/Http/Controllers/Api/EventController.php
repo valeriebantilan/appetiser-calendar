@@ -16,7 +16,7 @@ class EventController extends Controller
     public function index()
     {
         //
-        $events = Event::all();
+        $events = Event::orderBy('created_at', 'desc')->get();
 
         return response()->json($events);
     }
@@ -26,9 +26,33 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
+        $validatedData = $request->validate([
+            'eventName' => 'required',
+            'eventStart' => 'required',
+            'eventEnd' => 'required',
+          ]);
+
+          $eventDay = array_map(function($data){
+              if($data['isChecked'] === true) {
+                  return $data['value'];
+              }
+          }, $request->days);
+        
+          $filterDays = array_filter($eventDay);
+
+          $days = implode(",", $filterDays);
+
+          $event = Event::create([
+            'event_name' => $validatedData['eventName'],
+            'event_day' => $days,
+            'event_start' => $validatedData['eventStart'],
+            'event_end' => $validatedData['eventEnd'],
+          ]);
+  
+          return response()->json($event->find($event->id));
     }
 
     /**

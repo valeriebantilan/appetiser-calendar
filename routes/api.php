@@ -18,3 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('event', 'Api\EventController');
+Route::post('/event', ['as' => 'event', 'uses' => 'Api\EventController@create']);
