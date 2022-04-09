@@ -25,7 +25,7 @@
         "sass-loader": "^7.1.0"
     },
     "dependencies": {
-        "moment": "^2.24.0",
+        "moment": "^2.29.2",
         "moment-range": "^4.0.2",
         "moment-timezone": "^0.5.27",
         "react-big-calendar": "^0.22.1",
